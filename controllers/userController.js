@@ -204,6 +204,7 @@ export const userExport = async (req, res) => {
 
     writablestream.on("finish", function () {
       // console.log(BASE_URL)
+      console.log(`${BASE_URL}/files/export/users.csv`)
       res.json({
         downloadUrl: `${BASE_URL}/files/export/users.csv`,
       });
