@@ -14,13 +14,6 @@ app.use("/uploads",express.static("./uploads"))
 app.use("/files",express.static("./public/files"));
 
 
-app.get("/",(req,res)=>{
-    res.send("heelo wrod")
-})
-
-app.post("/",(req,res) => {
-    console.log(req.file)
-})
 
 const startserver = () => {
     try{
