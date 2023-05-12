@@ -207,7 +207,7 @@ export const userExport = async (req, res) => {
       console.log(BASE_URL)
       console.log(`${BASE_URL}/files/export/users.csv`)
       res.json({
-        downloadUrl: `https://merncrudbackend-production.up.railway.app/files/export/users.csv`,
+        downloadUrl: `${BASE_URL}/files/export/users.csv`,
       });
     });
 
