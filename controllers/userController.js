@@ -183,6 +183,7 @@ export const userstatus = async (req, res) => {
 
 export const userExport = async (req, res) => {
   try {
+    // console.log("start")
     const usersdata = await users.find();
 
     const csvStream = csv.format({ headers: true });
@@ -203,12 +204,14 @@ export const userExport = async (req, res) => {
     csvStream.pipe(writablestream);
 
     writablestream.on("finish", function () {
-      // console.log(BASE_URL)
+      console.log(BASE_URL)
       console.log(`${BASE_URL}/files/export/users.csv`)
       res.json({
-        downloadUrl: `${BASE_URL}/files/export/users.csv`,
+        downloadUrl: `https://merncrudbackend-production.up.railway.app/files/export/users.csv`,
       });
     });
+
+    console.log(BASE_URL)
 
     if (usersdata.length > 0) {
       usersdata.map((user) => {
