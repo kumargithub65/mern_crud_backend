@@ -10,7 +10,7 @@ router.get("/user/:id",getsingleuser )
 router.put("/user/edit/:id",upload.single("user_profile"),useredit )
 router.delete("/user/delete/:id",deleteUser )
 router.put("/user/status/:id",userstatus )
-router.get("/userexport",userExport )
+// router.get("/userexport",userExport )
 
 
 

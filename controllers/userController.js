@@ -3,6 +3,7 @@ import moment from "moment";
 import csv from "fast-csv";
 import fs from "fs";
 import dotenv from "dotenv";
+import e from "express";
 dotenv.config();
 
 const BASE_URL = process.env.BASE_URL;
@@ -79,7 +80,6 @@ export const getalluser = async (req, res) => {
       .sort({ datecreated: sort == "new" ? -1 : 1 })
       .limit(ITEM_PER_PAGE)
       .skip(skip);
-
 
     // console.log(usersdata)
     const pageCount = Math.ceil(count / ITEM_PER_PAGE); // 8 /4 = 2
@@ -182,58 +182,53 @@ export const userstatus = async (req, res) => {
 };
 
 export const userExport = async (req, res) => {
+  // debugger
   try {
-    // console.log("start")
     const usersdata = await users.find();
 
     const csvStream = csv.format({ headers: true });
 
     if (!fs.existsSync("public/files/export/")) {
-      if (!fs.existsSync("public/files")) {
-        fs.mkdirSync("public/files/");
-      }
-      if (!fs.existsSync("public/files/export")) {
-        fs.mkdirSync("./public/files/export/");
-      }
+        if (!fs.existsSync("public/files")) {
+            fs.mkdirSync("public/files/");
+        }
+        if (!fs.existsSync("public/files/export")) {
+            fs.mkdirSync("./public/files/export/");
+        }
     }
 
     const writablestream = fs.createWriteStream(
-      "public/files/export/users.csv"
+        "public/files/export/users.csv"
     );
 
     csvStream.pipe(writablestream);
 
     writablestream.on("finish", function () {
-      console.log(BASE_URL)
-      console.log(`${BASE_URL}/files/export/users.csv`)
-      res.json({
-        downloadUrl: `${BASE_URL}/files/export/users.csv`,
-      });
-    });
-
-    console.log(BASE_URL)
-
-    if (usersdata.length > 0) {
-      usersdata.map((user) => {
-        csvStream.write({
-          FirstName: user.fname ? user.fname : "-",
-          LastName: user.lname ? user.lname : "-",
-          Email: user.email ? user.email : "-",
-          Phone: user.mobile ? user.mobile : "-",
-          Gender: user.gender ? user.gender : "-",
-          Status: user.status ? user.status : "-",
-          Profile: user.profile ? user.profile : "-",
-          Location: user.location ? user.location : "-",
-          DateCreated: user.datecreated ? user.datecreated : "-",
-          DateUpdated: user.dateUpdated ? user.dateUpdated : "-",
+        res.json({
+            downloadUrl: `${BASE_URL}/files/export/users.csv`,
         });
-      });
+    });
+    if (usersdata.length > 0) {
+        usersdata.map((user) => {
+            csvStream.write({
+                FirstName: user.fname ? user.fname : "-",
+                LastName: user.lname ? user.lname : "-",
+                Email: user.email ? user.email : "-",
+                Phone: user.mobile ? user.mobile : "-",
+                Gender: user.gender ? user.gender : "-",
+                Status: user.status ? user.status : "-",
+                Profile: user.profile ? user.profile : "-",
+                Location: user.location ? user.location : "-",
+                DateCreated: user.datecreated ? user.datecreated : "-",
+                DateUpdated: user.dateUpdated ? user.dateUpdated : "-",
+            })
+        })
     }
-
     csvStream.end();
     writablestream.end();
-  } catch (error) {
-    // console.log(error.message)
-    res.status(401).json(error);
-  }
+
+} catch (error) {
+  console.log(error.message)
+    res.status(401).json(error)
+}
 };
