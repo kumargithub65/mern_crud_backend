@@ -21,7 +21,7 @@
     "start": "node --inspect  app.js"
   },
   "engines": {
-    "node": ">=14 <15"
+    "node": ">=14.20.1"
   },
   "keywords": [],
   "author": "",
